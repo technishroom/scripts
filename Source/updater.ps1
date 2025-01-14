@@ -1,3 +1,12 @@
+#cheking admin rights
+$currentUser = New-Object Security.Principal.WindowsPrincipal $([Security.Principal.WindowsIdentity]::GetCurrent())
+$testadmin = $currentUser.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
+if ($testadmin -eq $false) {
+    Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($myinvocation.MyCommand.Definition))
+    exit $LASTEXITCODE
+}
+Clear-Host
+
 $Url = "https://github.com/technishroom/scripts/archive/refs/heads/main.zip"
 $ExtractPath = "C:\Users\Public\Downloads\"
 $DownloadZipFile = $ExtractPath + "Shroom.zip"
@@ -20,7 +29,7 @@ Remove-Item $DownloadZipFile
 $extractedFolder = Get-ChildItem -Path $ExtractPath -Directory | Select-Object -First 1
 $renamedFolderPath = Join-Path -Path $ExtractPath -ChildPath $NewFolderName
 Write-Host $renamedFolderPath
-Move-Item -Path $extractedFolder.FullName -Destination $DestinationPath -Force
+Move-Item -Path $extractedFolder.FullName -Destination $renamedFolderPath -Force
 
 # Copy scripts to its destination
 Copy-Item -path ($renamedFolderPath + "\Scripts") -Destination $DestinationPath -Recurse -Force

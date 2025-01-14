@@ -58,7 +58,7 @@
   </Settings>
   <Actions Context="Author">
     <Exec>
-      <Command>$Home\AppData\Local\Shroom\Scripts\updater.exe</Command>
+      <Command>$Home\AppData\Local\Shroom\updater.exe</Command>
     </Exec>
   </Actions>
 </Task>
