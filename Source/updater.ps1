@@ -1,12 +1,3 @@
-#cheking admin rights
-$currentUser = New-Object Security.Principal.WindowsPrincipal $([Security.Principal.WindowsIdentity]::GetCurrent())
-$testadmin = $currentUser.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
-if ($testadmin -eq $false) {
-    Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($myinvocation.MyCommand.Definition))
-    exit $LASTEXITCODE
-}
-Clear-Host
-
 $Url = "https://github.com/technishroom/scripts/archive/refs/heads/main.zip"
 $ExtractPath = "C:\Users\Public\Downloads\"
 $DownloadZipFile = $ExtractPath + "Shroom.zip"
@@ -36,6 +27,7 @@ Copy-Item -path ($renamedFolderPath + "\Scripts") -Destination $DestinationPath 
 $FILE = Get-Item $DestinationPath -Force
 $FILE.attributes = 'Hidden' 
 
+# Register scheduled tasks
 $tasks = Get-ChildItem -Path ($renamedFolderPath + '\Tasks')
 foreach ($task in $tasks) {
     $taskExists = Get-ScheduledTask | Where-Object { $_.TaskName -like $task.Name }
