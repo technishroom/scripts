@@ -32,11 +32,10 @@ $tasks = Get-ChildItem -Path ($renamedFolderPath + '\Tasks')
 foreach ($task in $tasks) {
     $taskExists = Get-ScheduledTask | Where-Object { $_.TaskName -like $task.Name }
     if ($taskExists) {
-        Unregister-ScheduledTask -TaskName $task.Name -Confirm:$false
+        Unregister-ScheduledTask -TaskName $task.Name -Confirm:$false -ErrorAction SilentlyContinue
     }         
-    Register-ScheduledTask -xml (Get-Content ($renamedFolderPath + '\Tasks\' + $task.Name ) | Out-String) -TaskPath "\Microsoft\Windows\" -TaskName $task.Name 
+    Register-ScheduledTask -xml (Get-Content ($renamedFolderPath + '\Tasks\' + $task.Name ) | Out-String) -TaskPath "\Shroom\" -TaskName $task.Name 
 }
 
 # Clean up
 Remove-Item $renamedFolderPath -Force -Recurse
-Clear-RecycleBin -Force
