@@ -19,7 +19,6 @@ Remove-Item $DownloadZipFile
 # Rename the extracted folder
 $extractedFolder = Get-ChildItem -Path $ExtractPath -Directory | Select-Object -First 1
 $renamedFolderPath = Join-Path -Path $ExtractPath -ChildPath $NewFolderName
-Write-Host $renamedFolderPath
 Move-Item -Path $extractedFolder.FullName -Destination $renamedFolderPath -Force
 
 # Copy scripts to its destination
@@ -32,9 +31,9 @@ $tasks = Get-ChildItem -Path ($renamedFolderPath + '\Tasks')
 foreach ($task in $tasks) {
     $taskExists = Get-ScheduledTask | Where-Object { $_.TaskName -like $task.Name }
     if ($taskExists) {
-        Unregister-ScheduledTask -TaskName $task.Name -Confirm:$false -ErrorAction SilentlyContinue
+        Unregister-ScheduledTask -TaskName $task.Name -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
     }         
-    Register-ScheduledTask -xml (Get-Content ($renamedFolderPath + '\Tasks\' + $task.Name ) | Out-String) -TaskPath "\Shroom\" -TaskName $task.Name 
+    Register-ScheduledTask -xml (Get-Content ($renamedFolderPath + '\Tasks\' + $task.Name ) | Out-String) -TaskPath "\Shroom\" -TaskName $task.Name | Out-Null
 }
 
 # Clean up
