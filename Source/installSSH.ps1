@@ -34,3 +34,9 @@ Set-Service -Name sshd -StartupType 'Automatic'
 # Sprawdzamy status usługi
 Write-Host "Sprawdzanie statusu usługi OpenSSH..."
 Get-Service sshd
+
+# Dodajemy regułę zapory, aby umożliwić połączenia SSH w sieci publicznej
+Write-Host "Dodawanie reguły zapory dla SSH w sieci publicznej..."
+New-NetFirewallRule -Name "Allow_SSH_Public" -DisplayName "Allow OpenSSH In Public Network" -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22 -Profile Public
+
+Write-Host "Reguła zapory została dodana."
